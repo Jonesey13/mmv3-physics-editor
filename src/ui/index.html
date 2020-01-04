@@ -1,0 +1,34 @@
+<!doctype html>
+<html>
+  <head>
+    <style>{style}</style>
+    <script>{script}</script>
+  </head>
+  <body>
+    <header>
+      <img id="logo" src="{logo}"/>
+      <div id="language-section">
+        <div id="language-text">
+          <span id="language-text-content">Language:</span>
+        </div>
+        <img id="english" src="{english}"/>
+      </div>
+    </header>
+    <div id="track-and-car-type">
+      <div class="dropdown" id="track-select-container">
+        Track:
+        <select id="track-select" onchange="Action.load_car_types_for_selected_track()"> </select>
+      </div>
+      <div class="dropdown" id="primary-car-type-container">
+        Primary:
+        <select id="primary-car-type" onchange="Gui.enable_car_type_actions()"> </select>
+      </div>
+      <div class="dropdown" id="secondary-car-type-container">
+        Secondary:
+        <select id="secondary-car-type" onchange="Gui.enable_car_type_actions()"> </select>
+      </div>
+      <button class="save" id="track-save-button" onclick="Action.set_car_types_for_selected_track()" disabled>Save</button>
+      <button class="cancel" id="track-cancel-button" onclick="Action.load_car_types_for_selected_track()" disabled>Cancel</button>
+    </div>
+  </body>
+</html>

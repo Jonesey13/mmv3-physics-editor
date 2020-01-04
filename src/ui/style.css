@@ -1,0 +1,65 @@
+body {
+  font-family: "Helvetica Neue",Helvetica,Arial,serif;
+  color: #eee;
+  background-color: rgb(61, 61, 61);
+  margin: 0; padding: 0;
+}
+
+header {
+  display: flex;
+  justify-content: flex-start;
+  width: 100%;
+  height: 100px;
+  border-bottom: 1px solid black;
+  background-color: rgb(51, 51, 51);
+}
+
+#logo {
+  height: 100%;
+  flex: initial;
+}
+
+#language-section {
+  height: 100%;
+  flex: auto;
+  display: flex;
+  margin: 0 50px;
+  justify-content: flex-start;
+  align-items: center;
+  align-content: center;
+}
+
+#language-text {
+  font-family: "Helvetica Neue",Helvetica,Arial,serif;
+  font-weight: lighter;
+  font-size: 40px;
+  margin: 30px;
+  flex: initial;
+}
+
+#english {
+  height: 100%;
+  flex: initial;
+}
+
+#track-and-car-type {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  background-color: rgb(90, 90, 90);
+  padding: 10px;
+  box-sizing: border-box;
+}
+
+.dropdown {
+  flex: 1 1 auto;
+}
+
+select {
+  font-size: 20px;
+}
+
+button {
+  flex: 2 1 auto;
+  font-size: 20px;
+}
