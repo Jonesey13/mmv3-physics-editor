@@ -21,11 +21,13 @@
       </div>
       <div class="dropdown" id="primary-car-type-container">
         Primary Car Type:
-        <select id="primary-car-type" onchange="Gui.enable_car_type_actions()"> </select>
+        <select id="primary-car-type" onchange="Gui.change_of_car_type()"> </select>
+        <img class="car-type-image" id="primary-car-image" alt="Primary Car Type Image"/>
       </div>
       <div class="dropdown" id="secondary-car-type-container">
         Secondary Car Type:
-        <select id="secondary-car-type" onchange="Gui.enable_car_type_actions()"> </select>
+        <select id="secondary-car-type" onchange="Gui.change_of_car_type()"> </select>
+        <img class="car-type-image" id="secondary-car-image" alt="Secondary Car Type Image"/>
       </div>
       <button class="save" id="track-save-button" onclick="Action.set_car_types_for_selected_track()" disabled>Save</button>
       <button class="cancel" id="track-cancel-button" onclick="Action.load_car_types_for_selected_track()" disabled>Cancel</button>

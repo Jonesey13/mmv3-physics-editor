@@ -1,5 +1,7 @@
 /* jshint strict: true, esversion: 5, browser: true */
 
+var car_types = {};
+
 var Util = (function() {
 	"use strict";
 
@@ -73,24 +75,37 @@ var Gui = (function() {
 
 			Action.load_car_type_list();
 		},
-		set_car_type_list: function(car_types) {
+		set_car_type_list: function(car_type_list) {
 			var primary_select = document.getElementById('primary-car-type');
 
-			car_types.forEach(function(element, key) {
+			car_type_list.forEach(function(element, key) {
 				primary_select[key] = new Option(element.name, element.key);
 			});
 
 			var secondary_select = document.getElementById('secondary-car-type');
 
-			car_types.forEach(function(element, key) {
+			car_type_list.forEach(function(element, key) {
 				secondary_select[key] = new Option(element.name, element.key);
 			});
+
+			car_types = car_type_list;
 
 			Action.load_car_types_for_selected_track();
 		},
 		set_active_car_types: function(primary, secondary) {
 			$('#primary-car-type').val(primary);
 			$('#secondary-car-type').val(secondary);
+			Gui.set_active_car_type_images();
+		},
+		set_active_car_type_images: function() {
+			let primary = $('#primary-car-type').val();
+			let secondary = $('#secondary-car-type').val();
+			$('#primary-car-image').prop('src', car_types.find((car_type) => car_type.key === primary).image);
+			$('#secondary-car-image').prop('src', car_types.find((car_type) => car_type.key === secondary).image);
+		},
+		change_of_car_type: function() {
+			Gui.set_active_car_type_images();
+			Gui.enable_car_type_actions();
 		},
 		enable_car_type_actions: function() {
 			$('#track-save-button').prop('disabled', false);

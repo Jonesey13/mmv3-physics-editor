@@ -52,7 +52,7 @@ header {
 }
 
 .dropdown {
-  flex: 1 1 auto;
+  flex: 0 1;
   margin-right: 4px;
 }
 
@@ -63,4 +63,8 @@ select {
 button {
   flex: 2 1 auto;
   font-size: 20px;
+}
+
+.car-type-image {
+  height: 100px;
 }

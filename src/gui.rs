@@ -1,12 +1,12 @@
 use crate::car_type::CarType;
 use crate::data_service::DataService;
 use crate::car_type::TeamPlayer;
-use std::path::{Path, PathBuf};
 use std::sync::atomic::{AtomicBool, Ordering};
 use std::sync::Arc;
 
 use crate::template;
 use crate::track::Track;
+use crate::image::Image;
 
 use serde_derive::{Deserialize, Serialize};
 use serde_json;
@@ -41,7 +41,7 @@ pub enum GuiResponse {
     },
     CarTypesForTrack {
         primary: CarType,
-        secondary: CarType
+        secondary: CarType,
     },
     WrittenCarTypesForTrack,
 }
@@ -55,12 +55,12 @@ pub struct TrackResponseData {
 #[derive(Serialize)]
 pub struct CarTypeResponseData {
     key: CarType,
-    name: String
+    name: String,
+    image: String
 }
 
 pub fn spawn_gui() {
     let running = Arc::new(AtomicBool::new(true));
-    let r = running.clone();
 
     set_dpi_aware();
 
@@ -91,7 +91,8 @@ pub fn spawn_gui() {
                         car_types: CarType::iter()
                             .map(|car_type| CarTypeResponseData {
                                 key: car_type,
-                                name: car_type.get_message().unwrap().to_string()
+                                name: car_type.get_message().unwrap().to_string(),
+                                image: Image::Car(car_type).get_encoded_image().get_html_src_string()
                             }).collect()
                     }
                 ),

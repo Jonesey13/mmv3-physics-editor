@@ -1,3 +1,4 @@
+use crate::car_type::CarType;
 use std::collections::HashMap;
 use crate::language::Language;
 use base64::encode;
@@ -26,14 +27,16 @@ impl EncodedImageCollection {
 #[derive(Copy, Clone, Debug, Eq, PartialEq, Hash)]
 pub enum Image {
     Logo,
-    Lang(Language)
+    Lang(Language),
+    Car(CarType)
 }
 
 impl Image {
     pub fn get_bytes(&self) -> &'static [u8] {
         match self {
             Image::Logo => MMV3_LOGO,
-            Image::Lang(language) => language.get_image()
+            Image::Lang(language) => language.get_image(),
+            Image::Car(car_type) => car_type.get_image(),
         }
     }
 
