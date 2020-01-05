@@ -69,7 +69,7 @@ pub fn spawn_gui() {
     let mut webview = web_view::builder()
         .title("Micro Machines V3 Car Physics Editor")
         .content(Content::Html(html))
-        .size(1200, 550)
+        .size(1000, 550)
         .resizable(true)
         .debug(true)
         .user_data(())
