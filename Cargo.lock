@@ -213,8 +213,6 @@ checksum = "3df3561629a8bb4c57e5a2e4c43348d9e29c7c29d9b1c4c1f47166deca8f37ed"
 [[package]]
 name = "web-view"
 version = "0.5.4"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "24e8c3b31d38a20bc39481ca9c043b2cfaa51e95b5a881dd17cea04bcc8cdd8c"
 dependencies = [
  "boxfnonce",
  "urlencoding",
@@ -224,8 +222,6 @@ dependencies = [
 [[package]]
 name = "webview-sys"
 version = "0.3.3"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "60b233db4275df10dfec43dcc67fdbeae8df89361b8759cbf9533c218578dafd"
 dependencies = [
  "bitflags",
  "cc",

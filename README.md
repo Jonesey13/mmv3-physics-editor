@@ -6,14 +6,13 @@ A tool for changing the car types / physics of the playstation game Micro Machin
 * This gui tool leverages the [webview](https://github.com/zserge/webview) library to build a minimal native GUI
 * The basic code structure for the gui follows the [Compactor](https://github.com/Freaky/Compactor) project closely
 
-## Build Instructions
-To build the app please install rust (via rustup) and run `cargo build --release` from the root directory
-
 ## Usage
 _This tool has only been tested on the European (PAL) version of the game_
 
-Copy the target binary into the same folder as the editor with the name mmv3.bin
-* The editor will modify the file in place so take a backup beforehand if you would like to avoid data loss
+When opening the application a file explorer prompt will open. Please select a valid Micro Machines V3 .bin file (not the .cue!)
+
+## Build Instructions
+To build the app please install rust (via rustup) and run `cargo build --release` from the root directory
 
 **This application will not work in administrator mode due to [this issue](https://github.com/windows-toolkit/Microsoft.Toolkit.Win32/issues/50)**!
 

@@ -1,3 +1,4 @@
+use std::path::PathBuf;
 use crate::car_physics::CarPhysicsByCarType;
 use crate::car_physics::CarPhysicsByTrack;
 use crate::car_type::CarType;
@@ -9,27 +10,21 @@ use std::fs::File;
 use std::io::{Error, Seek, SeekFrom, Read, Write, Result, ErrorKind};
 use std::fs::OpenOptions;
 
-const FILE_PATH: &'static str = "./mmv3.bin";
-
-pub struct DataService {
+pub struct DataService<'a> {
     language: Language,
-    file_path: &'static str
+    file_path: &'a PathBuf
 }
 
-impl DataService {
-    pub fn new() -> Self {
+impl<'a> DataService<'a> {
+    pub fn new(file_path: &'a PathBuf) -> Self {
         Self {
             language: Language::English,
-            file_path: FILE_PATH
+            file_path
         }
     }
 
     pub fn set_language(&mut self, language: Language) {
         self.language = language;
-    }
-
-    pub fn set_file_path(&mut self, file_path: &'static str) {
-        self.file_path = file_path;
     }
 
     pub fn read_car_type(&self, track: Track, player: TeamPlayer) -> Result<CarType> {
@@ -78,10 +73,10 @@ mod tests {
 
     #[test]
     fn can_read_car_type() {
-        let mut data_service = DataService::new();
+        let file_path = PathBuf::from(TEST_FILE_PATH);
+        let mut data_service = DataService::new(&file_path);
 
         data_service.set_language(Language::TestLanguage);
-        data_service.set_file_path(TEST_FILE_PATH);
 
         let car_type = data_service.read_car_type(Track::Wipeup, TeamPlayer::First);
 

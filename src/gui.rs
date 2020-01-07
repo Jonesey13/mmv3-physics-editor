@@ -3,6 +3,7 @@ use crate::data_service::DataService;
 use crate::car_type::TeamPlayer;
 use std::sync::atomic::{AtomicBool, Ordering};
 use std::sync::Arc;
+use std::path::PathBuf;
 
 use crate::template;
 use crate::track::Track;
@@ -59,6 +60,11 @@ pub struct CarTypeResponseData {
     image: String
 }
 
+#[derive(Default, Debug, Serialize, Deserialize)]
+pub struct PersistentData {
+    pub file_path: PathBuf,
+}
+
 pub fn spawn_gui() {
     let running = Arc::new(AtomicBool::new(true));
 
@@ -72,19 +78,30 @@ pub fn spawn_gui() {
         .size(1000, 550)
         .resizable(true)
         .debug(true)
-        .user_data(())
+        .user_data(PersistentData::default())
         .invoke_handler(move |mut webview, arg| {
             match serde_json::from_str::<GuiRequest>(arg) {
-                Ok(GuiRequest::LoadTrackList) => message_dispatch(
-                    &mut webview,
-                    &GuiResponse::TrackList {
-                        tracks: Track::iter()
-                            .map(|track| TrackResponseData {
-                                key: track,
-                                name: track.get_message().unwrap().to_string()
-                            }).collect()
-                    }
-                ),
+                Ok(GuiRequest::LoadTrackList) => {
+                    let path = webview.dialog().open_file(
+                        "Select MMv3 Binary",
+                        "",
+                    )?.expect("No binary file selected!");
+
+                    let mut user_data = webview.user_data_mut();
+
+                    user_data.file_path = path;
+                    
+                    message_dispatch(
+                        &mut webview,
+                        &GuiResponse::TrackList {
+                            tracks: Track::iter()
+                                .map(|track| TrackResponseData {
+                                    key: track,
+                                    name: track.get_message().unwrap().to_string()
+                                }).collect()
+                            }
+                    )
+                },
                 Ok(GuiRequest::LoadCarTypeList) => message_dispatch(
                     &mut webview,
                     &GuiResponse::CarTypeList {
@@ -99,7 +116,7 @@ pub fn spawn_gui() {
                 Ok(GuiRequest::LoadCarTypesForTrack {
                     track
                 }) => {
-                    let data_service = DataService::new();
+                    let data_service = DataService::new(&webview.user_data().file_path);
 
                     let primary = data_service
                         .read_car_type(track, TeamPlayer::First)
@@ -122,7 +139,7 @@ pub fn spawn_gui() {
                     primary,
                     secondary
                 }) => {
-                    let data_service = DataService::new();
+                    let data_service = DataService::new(&webview.user_data().file_path);
 
                     data_service
                         .write_car_type(track, TeamPlayer::First, primary)
