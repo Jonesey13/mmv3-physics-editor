@@ -5,15 +5,15 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "type": "lldb",
+            "name": "(Windows) Launch",
+            "type": "cppvsdbg",
             "request": "launch",
-            "name": "Rust debug",
-            "program": "${workspaceFolder}/target/debug/mmv3_physics_editor",
-            "cwd": "${workspaceFolder}",
-            "preLaunchTask": "build debug",
-            "sourceLanguages": [
-              "rust",
-            ]
-          },
+            "program": "${workspaceRoot}/target/debug/mmv3_physics_editor.exe",
+            "args": [],
+            "stopAtEntry": false,
+            "cwd": "${workspaceRoot}",
+            "environment": [],
+            "externalConsole": true
+        }
     ]
 }

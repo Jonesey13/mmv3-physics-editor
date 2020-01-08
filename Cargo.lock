@@ -213,6 +213,7 @@ checksum = "3df3561629a8bb4c57e5a2e4c43348d9e29c7c29d9b1c4c1f47166deca8f37ed"
 [[package]]
 name = "web-view"
 version = "0.5.4"
+source = "git+https://github.com/Jonesey13/web-view.git#cb42abd74e9868d37f6586a602c30a2a545086c7"
 dependencies = [
  "boxfnonce",
  "urlencoding",
@@ -222,6 +223,7 @@ dependencies = [
 [[package]]
 name = "webview-sys"
 version = "0.3.3"
+source = "git+https://github.com/Jonesey13/web-view.git#cb42abd74e9868d37f6586a602c30a2a545086c7"
 dependencies = [
  "bitflags",
  "cc",

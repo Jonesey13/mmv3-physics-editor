@@ -4,6 +4,8 @@ use crate::car_type::TeamPlayer;
 use std::sync::atomic::{AtomicBool, Ordering};
 use std::sync::Arc;
 use std::path::PathBuf;
+use std::ffi::OsStr;
+use std::fs;
 
 use crate::template;
 use crate::track::Track;
@@ -13,6 +15,8 @@ use serde_derive::{Deserialize, Serialize};
 use serde_json;
 use web_view::*;
 use strum::*;
+
+const MMV3_BIN_SIZE: u64 = 674461872;
 
 // messages received from the GUI
 #[derive(Deserialize, Debug, Clone)]
@@ -82,10 +86,31 @@ pub fn spawn_gui() {
         .invoke_handler(move |mut webview, arg| {
             match serde_json::from_str::<GuiRequest>(arg) {
                 Ok(GuiRequest::LoadTrackList) => {
-                    let path = webview.dialog().open_file(
-                        "Select MMv3 Binary",
-                        "",
-                    )?.expect("No binary file selected!");
+                    let path: PathBuf;
+
+                    loop {
+                        let path_opt = webview.dialog().open_file(
+                            "Select MMv3 Binary",
+                            "",
+                        )?;
+
+                        if let Some(path_val) = path_opt {
+                            if path_val.extension().unwrap_or(OsStr::new("")) == "bin" {
+                                let metadata = fs::metadata(&path_val);
+
+                                if metadata.is_ok() && metadata.unwrap().len() == MMV3_BIN_SIZE {
+                                    path = path_val;
+                                    break;
+                                }
+                            }
+
+                            webview
+                            .dialog()
+                            .warning("Warning", "Please choose a valid Micro Machines V3 binary file")?;
+                        } else {
+                            webview.exit(); // User has cancelled
+                        }
+                    }
 
                     let mut user_data = webview.user_data_mut();
 

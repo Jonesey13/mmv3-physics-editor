@@ -17,7 +17,7 @@ To build the app please install rust (via rustup) and run `cargo build --release
 **This application will not work in administrator mode due to [this issue](https://github.com/windows-toolkit/Microsoft.Toolkit.Win32/issues/50)**!
 
 ## Debugging
-There is a VS code task for debugging the rust code (which should just work with the LLDB debugger).
+There is a VS code config for debugging the rust code (using the MSVC debugger so you may need to install the C++ extension).
 
 For the frontend you can run the [Edge DevTools](https://docs.microsoft.com/en-us/microsoft-edge/devtools-guide).
 
