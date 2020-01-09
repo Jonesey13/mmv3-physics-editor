@@ -1,29 +1,29 @@
 /// Overrides the corresponding CarPhysicsByCarType data 
 /// unless acceleration = 0
-#[derive(Copy, Clone, Debug)]
+#[derive(Copy, Clone, Debug, PartialEq, Eq)]
 pub struct CarPhysicsByTrack {
-    acceleration: u8,
-    top_speed: u8,
-    grip: u8,
-    collision_impact: u8,
-    turning: u8,
-    sliding_friction: u8,
+    pub acceleration: u8,
+    pub top_speed: u8,
+    pub grip: u8,
+    pub collision_impact: u8,
+    pub turning: u8,
+    pub sliding_friction: u8,
 }
 
 /// Contains the base physics data for a car type but some fields 
 /// can be overwritten by the relevant CarPhysicsByTrack values
-#[derive(Copy, Clone, Debug)]
+#[derive(Copy, Clone, Debug, PartialEq, Eq)]
 pub struct CarPhysicsByCarType {
-    grip: u16,
-    collision_impact: u16,
-    braking: u16, /// Not fully understood
-    top_speed: u16,
-    reverse_related: u16, /// Not fully understood
-    turning: u16,
-    sliding_friction: u16,
-    acceleration: u16,
-    _unknown_1: u16,
-    _unknown_2: u16
+    pub grip: u16,
+    pub collision_impact: u16,
+    pub braking: u16, /// Not fully understood
+    pub top_speed: u16,
+    pub reverse_related: u16, /// Not fully understood
+    pub turning: u16,
+    pub sliding_friction: u16,
+    pub acceleration: u16,
+    pub _unknown_1: u16,
+    pub _unknown_2: u16
 }
 
 impl From<CarPhysicsByCarType> for CarPhysicsByTrack {
@@ -35,6 +35,30 @@ impl From<CarPhysicsByCarType> for CarPhysicsByTrack {
             collision_impact: (car_type_physics.collision_impact / 4) as u8,
             turning: car_type_physics.turning as u8,
             sliding_friction: car_type_physics.sliding_friction as u8
+        }
+    }
+}
+
+impl CarPhysicsByTrack {
+    pub fn get_byte_array(&self) -> [u8; 6] {
+        [
+            self.acceleration, 
+            self.top_speed,
+            self.grip,
+            self.collision_impact,
+            self.turning,
+            self.sliding_friction
+        ]
+    }
+
+    pub fn new_from_byte_array(bytes: [u8; 6]) -> Self {
+        Self {
+            acceleration: bytes[0],
+            top_speed: bytes[1],
+            grip: bytes[2],
+            collision_impact: bytes[3],
+            turning: bytes[4],
+            sliding_friction: bytes[5] 
         }
     }
 }

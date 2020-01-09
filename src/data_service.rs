@@ -57,11 +57,20 @@ impl<'a> DataService<'a> {
         Ok(())
     }
 
-    pub fn read_car_physics_by_track(&self, track: Track) -> CarPhysicsByTrack {
-        unimplemented!()
+    pub fn read_car_physics_by_track(&self, track: Track) -> Result<CarPhysicsByTrack> {
+        let mut file = File::open(self.file_path)?;
+
+        let byte_offset = self.language.get_car_physics_by_track_offset() + track.get_physics_select_val() as u64;
+
+        file.seek(SeekFrom::Start(byte_offset))?;
+
+        let mut buffer = [0u8; 6];
+        file.read(&mut buffer)?;
+        
+        Ok(CarPhysicsByTrack::new_from_byte_array(buffer))
     }
 
-    pub fn read_car_physics_by_car_type(&self, car_type: CarType) -> CarPhysicsByCarType {
+    pub fn read_car_physics_by_car_type(&self, car_type: CarType) -> Result<CarPhysicsByCarType> {
         unimplemented!()
     }
 }
@@ -69,7 +78,7 @@ impl<'a> DataService<'a> {
 #[cfg(test)]
 mod tests {
     use super::*;
-    const TEST_FILE_PATH: &'static str = "./assets/test.bin";
+    const TEST_FILE_PATH: &'static str = "./assets/testbin";
 
     #[test]
     fn can_read_car_type() {
@@ -82,5 +91,28 @@ mod tests {
 
         assert!(car_type.is_ok());
         assert_eq!(car_type.unwrap(), CarType::DumperTruck);
+    }
+
+    #[test]
+    fn can_read_physics_by_track() {
+        let file_path = PathBuf::from(TEST_FILE_PATH);
+        let mut data_service = DataService::new(&file_path);
+
+        data_service.set_language(Language::TestLanguage);
+
+        let physics = data_service.read_car_physics_by_track(Track::Wipeup);
+
+        assert!(physics.is_ok());
+        assert_eq!(
+            physics.unwrap(), 
+            CarPhysicsByTrack {
+                acceleration: 18,
+                top_speed: 19,
+                grip: 20,
+                collision_impact: 21,
+                turning: 22,
+                sliding_friction: 23,
+            }
+        );
     }
 }
