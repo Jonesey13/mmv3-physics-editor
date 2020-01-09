@@ -1,3 +1,5 @@
 /target
 *.bin
 *.cue
+/releases
+*.bak
