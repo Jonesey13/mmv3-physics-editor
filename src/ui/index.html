@@ -17,7 +17,7 @@
     <div id="track-and-car-type">
       <div class="dropdown" id="track-select-container">
         Track:
-        <select id="track-select" onchange="Action.load_car_types_for_selected_track()"> </select>
+        <select id="track-select" onchange="Action.load_car_data_for_selected_track()"> </select>
       </div>
       <div class="dropdown" id="primary-car-type-container">
         Primary Car Type:
@@ -29,8 +29,44 @@
         <select id="secondary-car-type" onchange="Gui.change_of_car_type()"> </select>
         <img class="car-type-image" id="secondary-car-image" alt="Secondary Car Type Image"/>
       </div>
-      <button class="save" id="track-save-button" onclick="Action.set_car_types_for_selected_track()" disabled>Save</button>
-      <button class="cancel" id="track-cancel-button" onclick="Action.load_car_types_for_selected_track()" disabled>Cancel</button>
+      <button class="save" id="track-save-button" onclick="Action.set_car_data_for_selected_track()" disabled>Save</button>
+      <button class="cancel" id="track-cancel-button" onclick="Action.load_car_data_for_selected_track()" disabled>Cancel</button>
+    </div>
+    <div id="physics-selection">
+      <table>
+        <thead>
+          <tr>
+            <th>Property</th>
+            <th>Value (0-255)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="header-column">Acceleration</td>
+            <td id="acceleration"></td>
+          </tr>
+          <tr>
+            <td class="header-column">Top Speed</td>
+            <td id="top-speed"></td>
+          </tr>
+          <tr>
+            <td class="header-column">Grip</td>
+            <td id="grip"></td>
+          </tr>
+          <tr>
+            <td class="header-column">Collision Impact</td>
+            <td id="collision-impact"></td>
+          </tr>
+          <tr>
+            <td class="header-column">Turning</td>
+            <td id="turning"></td>
+          </tr>
+          <tr>
+            <td class="header-column">Sliding Friction</td>
+            <td id="sliding-friction"></td>
+          </tr>
+        </tbody>
+      </table>
     </div>
   </body>
 </html>

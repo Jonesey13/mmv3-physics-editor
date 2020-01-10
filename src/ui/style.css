@@ -9,7 +9,7 @@ header {
   display: flex;
   justify-content: flex-start;
   width: 100%;
-  height: 100px;
+  height: 15vh;
   border-bottom: 1px solid black;
   background-color: rgb(51, 51, 51);
 }
@@ -23,7 +23,6 @@ header {
   height: 100%;
   flex: auto;
   display: flex;
-  margin: 0 50px;
   justify-content: flex-start;
   align-items: center;
   align-content: center;
@@ -32,8 +31,9 @@ header {
 #language-text {
   font-family: "Helvetica Neue",Helvetica,Arial,serif;
   font-weight: lighter;
-  font-size: 40px;
-  margin: 30px;
+  font-size: 30px;
+  margin: 5vw;
+  width: 30vw;
   flex: initial;
 }
 
@@ -52,19 +52,35 @@ header {
 }
 
 .dropdown {
-  flex: 0 1;
-  margin-right: 4px;
+  flex: 4 1;
+  margin-left: 12px;
+  margin-right: 12px;
 }
 
 select {
-  font-size: 20px;
+  font-size: 16px;
+  width: 100%
 }
 
 button {
-  flex: 2 1 auto;
+  flex: 1 1 auto;
   font-size: 20px;
 }
 
 .car-type-image {
-  height: 100px;
+  width: 100%;
+}
+
+th {
+  border: 1px solid white;
+  border-radius: 10px;
+  width: 25vw;
+}
+
+td {
+  border: 2px solid grey;
+  border-radius: 1px;
+  width: 40vw;
+  text-align: center;
+  height: 40px;
 }

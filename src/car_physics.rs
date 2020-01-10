@@ -1,6 +1,8 @@
+use serde_derive::{Deserialize, Serialize};
+
 /// Overrides the corresponding CarPhysicsByCarType data 
 /// unless acceleration = 0
-#[derive(Copy, Clone, Debug, PartialEq, Eq)]
+#[derive(Copy, Clone, Debug, PartialEq, Eq, Serialize, Deserialize)]
 pub struct CarPhysicsByTrack {
     pub acceleration: u8,
     pub top_speed: u8,

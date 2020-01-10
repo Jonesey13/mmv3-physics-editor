@@ -60,7 +60,7 @@ impl<'a> DataService<'a> {
     pub fn read_car_physics_by_track(&self, track: Track) -> Result<CarPhysicsByTrack> {
         let mut file = File::open(self.file_path)?;
 
-        let byte_offset = self.language.get_car_physics_by_track_offset() + track.get_physics_select_val() as u64;
+        let byte_offset = self.language.get_car_physics_by_track_offset() + 6 * track.get_physics_select_val() as u64;
 
         file.seek(SeekFrom::Start(byte_offset))?;
 

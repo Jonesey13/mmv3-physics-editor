@@ -1,3 +1,4 @@
+use crate::car_physics::CarPhysicsByTrack;
 use crate::car_type::CarType;
 use crate::data_service::DataService;
 use crate::car_type::TeamPlayer;
@@ -24,14 +25,14 @@ const MMV3_BIN_SIZE: u64 = 674461872;
 pub enum GuiRequest {
     LoadTrackList,
     LoadCarTypeList,
-    LoadCarTypesForTrack {
+    LoadCarDataForTrack {
         track: Track
     },
     WriteCarTypesForTrack {
         track: Track,
         primary: CarType,
         secondary: CarType
-    }
+    },
 }
 
 // messages to send to the GUI
@@ -44,9 +45,10 @@ pub enum GuiResponse {
     CarTypeList {
         car_types: Vec<CarTypeResponseData>
     },
-    CarTypesForTrack {
+    CarDataForTrack {
         primary: CarType,
         secondary: CarType,
+        physics: CarPhysicsByTrack
     },
     WrittenCarTypesForTrack,
 }
@@ -79,7 +81,7 @@ pub fn spawn_gui() {
     let mut webview = web_view::builder()
         .title("Micro Machines V3 Car Physics Editor")
         .content(Content::Html(html))
-        .size(1000, 550)
+        .size(1000, 800)
         .resizable(true)
         .debug(true)
         .user_data(PersistentData::default())
@@ -138,7 +140,7 @@ pub fn spawn_gui() {
                             }).collect()
                     }
                 ),
-                Ok(GuiRequest::LoadCarTypesForTrack {
+                Ok(GuiRequest::LoadCarDataForTrack {
                     track
                 }) => {
                     let data_service = DataService::new(&webview.user_data().file_path);
@@ -149,16 +151,19 @@ pub fn spawn_gui() {
                     let secondary = data_service
                         .read_car_type(track, TeamPlayer::Second)
                         .expect("Failed to read secondary car type!");
+                    let physics = data_service
+                        .read_car_physics_by_track(track)
+                        .expect("Failed to read car physics");
 
                     message_dispatch(
                         &mut webview,
-                        &GuiResponse::CarTypesForTrack {
+                        &GuiResponse::CarDataForTrack {
                             primary,
-                            secondary
+                            secondary,
+                            physics
                         }
                     );
-                }
-                ,
+                },
                 Ok(GuiRequest::WriteCarTypesForTrack {
                     track,
                     primary,

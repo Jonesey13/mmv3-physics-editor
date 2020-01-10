@@ -158,6 +158,13 @@ impl TeamPlayer {
             TeamPlayer::Second => 80
         }
     }
+
+    pub fn get_car_physics_shift(&self) -> u64 {
+        match self {
+            TeamPlayer::First => 0,
+            TeamPlayer::Second => 80
+        }
+    }
 }
 
 impl CarType {

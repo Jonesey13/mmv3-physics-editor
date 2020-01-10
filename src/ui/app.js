@@ -19,8 +19,8 @@ var Action = (function() {
 		load_car_type_list: function() {
 			external.invoke(JSON.stringify({ type: 'LoadCarTypeList' }));
 		},
-		load_car_types_for_selected_track: function() {
-			external.invoke(JSON.stringify({ type: 'LoadCarTypesForTrack', track: $('#track-select').val() }));
+		load_car_data_for_selected_track: function() {
+			external.invoke(JSON.stringify({ type: 'LoadCarDataForTrack', track: $('#track-select').val() }));
 		},
 		set_car_types_for_selected_track: function() {
 			external.invoke(JSON.stringify({ 
@@ -46,12 +46,12 @@ var Response = (function() {
 				case "CarTypeList":
 					Gui.set_car_type_list(msg.car_types);
 					break;
-				case "CarTypesForTrack":
-					Gui.set_active_car_types(msg.primary, msg.secondary);
-					Gui.disable_car_type_actions();
+				case "CarDataForTrack":
+					Gui.set_car_data(msg.primary, msg.secondary, msg.physics);
+					Gui.disable_car_data_actions();
 					break;
 				case "WrittenCarTypesForTrack":
-					Gui.disable_car_type_actions();
+					Gui.disable_car_data_actions();
 					break;
 			}
 		}
@@ -90,11 +90,18 @@ var Gui = (function() {
 
 			car_types = car_type_list;
 
-			Action.load_car_types_for_selected_track();
+			Action.load_car_data_for_selected_track();
 		},
-		set_active_car_types: function(primary, secondary) {
+		set_car_data: function(primary, secondary, physics) {
 			$('#primary-car-type').val(primary);
 			$('#secondary-car-type').val(secondary);
+			$('#acceleration').text(physics.acceleration);
+			$('#top-speed').text(physics.top_speed);
+			$('#grip').text(physics.grip);
+			$('#collision-impact').text(physics.collision_impact);
+			$('#turning').text(physics.turning);
+			$('#sliding-friction').text(physics.sliding_friction);
+
 			Gui.set_active_car_type_images();
 		},
 		set_active_car_type_images: function() {
@@ -105,13 +112,13 @@ var Gui = (function() {
 		},
 		change_of_car_type: function() {
 			Gui.set_active_car_type_images();
-			Gui.enable_car_type_actions();
+			Gui.enable_car_data_actions();
 		},
-		enable_car_type_actions: function() {
+		enable_car_data_actions: function() {
 			$('#track-save-button').prop('disabled', false);
 			$('#track-cancel-button').prop('disabled', false);
 		},
-		disable_car_type_actions: function() {
+		disable_car_data_actions: function() {
 			$('#track-save-button').prop('disabled', true);
 			$('#track-cancel-button').prop('disabled', true);
 		},
