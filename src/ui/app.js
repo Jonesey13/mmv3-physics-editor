@@ -22,13 +22,31 @@ var Action = (function() {
 		load_car_data_for_selected_track: function() {
 			external.invoke(JSON.stringify({ type: 'LoadCarDataForTrack', track: $('#track-select').val() }));
 		},
-		set_car_types_for_selected_track: function() {
+		set_car_data_for_selected_track: function() {
+			var mainForm = $('#main-form');
+
+			if(! mainForm[0].checkValidity()) {
+				return false;
+			}
+
+			var physics = {
+				acceleration: parseInt($('#acceleration').val()),
+				top_speed: parseInt($('#top-speed').val()),
+				grip: parseInt($('#grip').val()),
+				collision_impact: parseInt($('#collision-impact').val()),
+				turning: parseInt($('#turning').val()),
+				sliding_friction: parseInt($('#sliding-friction').val()),
+			}
+
 			external.invoke(JSON.stringify({ 
-				type: 'WriteCarTypesForTrack', 
+				type: 'WriteCarDataForTrack', 
 				track: $('#track-select').val(),
 				primary: $('#primary-car-type').val(),
 				secondary: $('#secondary-car-type').val(),
+				physics: physics
 			}));
+
+			return false;
 		}
 	};
 })();
@@ -50,7 +68,7 @@ var Response = (function() {
 					Gui.set_car_data(msg.primary, msg.secondary, msg.physics);
 					Gui.disable_car_data_actions();
 					break;
-				case "WrittenCarTypesForTrack":
+				case "WrittenCarDataForTrack":
 					Gui.disable_car_data_actions();
 					break;
 			}
@@ -95,12 +113,12 @@ var Gui = (function() {
 		set_car_data: function(primary, secondary, physics) {
 			$('#primary-car-type').val(primary);
 			$('#secondary-car-type').val(secondary);
-			$('#acceleration').text(physics.acceleration);
-			$('#top-speed').text(physics.top_speed);
-			$('#grip').text(physics.grip);
-			$('#collision-impact').text(physics.collision_impact);
-			$('#turning').text(physics.turning);
-			$('#sliding-friction').text(physics.sliding_friction);
+			$('#acceleration').val(physics.acceleration);
+			$('#top-speed').val(physics.top_speed);
+			$('#grip').val(physics.grip);
+			$('#collision-impact').val(physics.collision_impact);
+			$('#turning').val(physics.turning);
+			$('#sliding-friction').val(physics.sliding_friction);
 
 			Gui.set_active_car_type_images();
 		},
@@ -112,6 +130,9 @@ var Gui = (function() {
 		},
 		change_of_car_type: function() {
 			Gui.set_active_car_type_images();
+			Gui.enable_car_data_actions();
+		},
+		change_of_car_physics: function() {
 			Gui.enable_car_data_actions();
 		},
 		enable_car_data_actions: function() {

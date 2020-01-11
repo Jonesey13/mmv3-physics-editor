@@ -1,6 +1,8 @@
 # mmv3-physics-editor
 
-A tool for changing the car types / physics of the playstation game Micro Machines V3 (copyright belongs to Codemasters)
+A tool for changing the car types / physics of the playstation game Micro Machines V3 (copyright belongs to Codemasters):
+![Screenshot](./assets/Screenshot.png)
+
 * If you want to change/edit the actual tracks you should checkout the [MMEd](https://github.com/RichardBradley/MMEd) tool
 
 * This gui tool leverages the [webview](https://github.com/zserge/webview) library to build a minimal native GUI
@@ -22,7 +24,9 @@ There is a VS code config for debugging the rust code (using the MSVC debugger s
 For the frontend you can run the [Edge DevTools](https://docs.microsoft.com/en-us/microsoft-edge/devtools-guide).
 
 ## Version History
-* **0.1**: Initial version. Reading/Writing of car types only
+* **0.3**: Add reading/editing of physics by track.
+* **0.2**: Add car type images.
+* **0.1**: Initial version. Reading/Writing of car types only.
 
 ## Thanks
 * Rich Bradley for documenting the MMv3 resources [here](http://www.bradders.org/MMs/php-mms.php)

@@ -28,10 +28,11 @@ pub enum GuiRequest {
     LoadCarDataForTrack {
         track: Track
     },
-    WriteCarTypesForTrack {
+    WriteCarDataForTrack {
         track: Track,
         primary: CarType,
-        secondary: CarType
+        secondary: CarType,
+        physics: CarPhysicsByTrack
     },
 }
 
@@ -50,7 +51,7 @@ pub enum GuiResponse {
         secondary: CarType,
         physics: CarPhysicsByTrack
     },
-    WrittenCarTypesForTrack,
+    WrittenCarDataForTrack,
 }
 
 #[derive(Serialize)]
@@ -164,10 +165,11 @@ pub fn spawn_gui() {
                         }
                     );
                 },
-                Ok(GuiRequest::WriteCarTypesForTrack {
+                Ok(GuiRequest::WriteCarDataForTrack {
                     track,
                     primary,
-                    secondary
+                    secondary,
+                    physics
                 }) => {
                     let data_service = DataService::new(&webview.user_data().file_path);
 
@@ -177,10 +179,13 @@ pub fn spawn_gui() {
                     data_service
                         .write_car_type(track, TeamPlayer::Second, secondary)
                         .expect("Failed to write secondary car type!");
+                    data_service
+                        .write_car_physics_by_track(track, physics)
+                        .expect("Failed to write car physics for track!");
 
                     message_dispatch(
                         &mut webview,
-                        &GuiResponse::WrittenCarTypesForTrack
+                        &GuiResponse::WrittenCarDataForTrack
                     );
                 }
                 ,

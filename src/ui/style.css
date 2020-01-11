@@ -84,3 +84,11 @@ td {
   text-align: center;
   height: 40px;
 }
+
+input {
+  font-size: 16px;
+  text-align: center;
+  width: 40px;
+  color: #eee;
+  background-color: grey;
+}

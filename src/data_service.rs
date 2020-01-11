@@ -70,6 +70,18 @@ impl<'a> DataService<'a> {
         Ok(CarPhysicsByTrack::new_from_byte_array(buffer))
     }
 
+    pub fn write_car_physics_by_track(&self, track: Track, physics: CarPhysicsByTrack) -> Result<()> {
+        let mut file = OpenOptions::new().write(true).open(self.file_path)?;
+
+        let byte_offset = self.language.get_car_physics_by_track_offset() + 6 * track.get_physics_select_val() as u64;
+
+        file.seek(SeekFrom::Start(byte_offset))?;
+
+        file.write(&physics.get_byte_array())?;
+
+        Ok(())
+    }
+
     pub fn read_car_physics_by_car_type(&self, car_type: CarType) -> Result<CarPhysicsByCarType> {
         unimplemented!()
     }
