@@ -14,7 +14,7 @@ pub struct CarPhysicsByTrack {
 
 /// Contains the base physics data for a car type but some fields 
 /// can be overwritten by the relevant CarPhysicsByTrack values
-#[derive(Copy, Clone, Debug, PartialEq, Eq)]
+#[derive(Copy, Clone, Debug, PartialEq, Eq, Serialize, Deserialize)]
 pub struct CarPhysicsByCarType {
     pub grip: u16,
     pub collision_impact: u16,
@@ -53,7 +53,7 @@ impl CarPhysicsByTrack {
         ]
     }
 
-    pub fn new_from_byte_array(bytes: [u8; 6]) -> Self {
+    pub fn new_from_byte_array(bytes: &[u8]) -> Self {
         Self {
             acceleration: bytes[0],
             top_speed: bytes[1],

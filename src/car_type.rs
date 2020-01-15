@@ -182,6 +182,15 @@ impl CarType {
             car_type.get_byte_val() == byte
         })
     }
+
+    pub fn get_physics_select_val(&self) -> u8 {
+        let trimmed_string = self.get_str("CarSelect")
+            .expect(&format!("Missing CarSelect prop for car type {:?}", self))
+            .trim_start_matches("0x");
+
+        u8::from_str_radix(trimmed_string, 16)
+            .expect(&format!("Could not parse CarSelect prop on car type {:?}", self))
+    }
 }
 
 #[test]

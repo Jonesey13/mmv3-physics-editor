@@ -1,3 +1,4 @@
+use crate::car_physics::CarPhysicsByCarType;
 use crate::car_physics::CarPhysicsByTrack;
 use crate::car_type::CarType;
 use crate::data_service::DataService;
@@ -28,6 +29,9 @@ pub enum GuiRequest {
     LoadCarDataForTrack {
         track: Track
     },
+    LoadCarPhysicsForCarType {
+        car_type: CarType
+    },
     WriteCarDataForTrack {
         track: Track,
         primary: CarType,
@@ -49,6 +53,9 @@ pub enum GuiResponse {
     CarDataForTrack {
         primary: CarType,
         secondary: CarType,
+        physics: CarPhysicsByTrack,
+    },
+    CarPhysicsForCarType {
         physics: CarPhysicsByTrack
     },
     WrittenCarDataForTrack,
@@ -161,7 +168,24 @@ pub fn spawn_gui() {
                         &GuiResponse::CarDataForTrack {
                             primary,
                             secondary,
-                            physics
+                            physics,
+                        }
+                    );
+                },
+                Ok(GuiRequest::LoadCarPhysicsForCarType {
+                    car_type
+                }) => {
+                    let data_service = DataService::new(&webview.user_data().file_path);
+
+                    let physics: CarPhysicsByTrack = data_service
+                        .read_car_physics_by_car_type(car_type)
+                        .expect("Failed to read car physics")
+                        .into();
+
+                    message_dispatch(
+                        &mut webview,
+                        &GuiResponse::CarPhysicsForCarType {
+                            physics,
                         }
                     );
                 },

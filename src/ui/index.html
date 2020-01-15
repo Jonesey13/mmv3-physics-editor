@@ -41,6 +41,7 @@
             <tr>
               <th>Property</th>
               <th>Value (0-255)</th>
+              <th>Value From Car Type <br> (used when acceleration = 0)</th>
             </tr>
           </thead>
           <tbody>
@@ -49,36 +50,42 @@
               <td>
                 <input required id="acceleration" type="number" min="0" max="255" onchange="Gui.change_of_car_physics()">
               </td>
+              <td id=acceleration-car-type></td>
             </tr>
             <tr>
               <td class="header-column">Top Speed</td>
               <td>
                 <input required id="top-speed" type="number" min="0" max="255" onchange="Gui.change_of_car_physics()">
               </td>
+              <td id=top-speed-car-type></td>
             </tr>
             <tr>
               <td class="header-column">Grip</td>
               <td>
                 <input required id="grip" type="number" min="0" max="255" onchange="Gui.change_of_car_physics()">
               </td>
+              <td id=grip-car-type></td>
             </tr>
             <tr>
               <td class="header-column">Collision Impact</td>
               <td>
                 <input required id="collision-impact" type="number" min="0" max="255" onchange="Gui.change_of_car_physics()">
               </td>
+              <td id=collision-impact-car-type></td>
             </tr>
             <tr>
               <td class="header-column">Turning</td>
               <td>
                 <input required id="turning" type="number" min="0" max="255" onchange="Gui.change_of_car_physics()">
               </td>
+              <td id=turning-car-type></td>
             </tr>
             <tr>
               <td class="header-column">Sliding Friction</td>
               <td>
                 <input required id="sliding-friction" type="number" min="0" max="255" onchange="Gui.change_of_car_physics()">
               </td>
+              <td id=sliding-friction-car-type></td>
             </tr>
           </tbody>
         </table>

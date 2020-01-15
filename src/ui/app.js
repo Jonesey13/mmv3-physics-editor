@@ -22,6 +22,9 @@ var Action = (function() {
 		load_car_data_for_selected_track: function() {
 			external.invoke(JSON.stringify({ type: 'LoadCarDataForTrack', track: $('#track-select').val() }));
 		},
+		load_car_physics_for_car_type: function() {
+			external.invoke(JSON.stringify({ type: 'LoadCarPhysicsForCarType', car_type: $('#primary-car-type').val() }));
+		},
 		set_car_data_for_selected_track: function() {
 			var mainForm = $('#main-form');
 
@@ -66,7 +69,11 @@ var Response = (function() {
 					break;
 				case "CarDataForTrack":
 					Gui.set_car_data(msg.primary, msg.secondary, msg.physics);
+					Action.load_car_physics_for_car_type();
 					Gui.disable_car_data_actions();
+					break;
+				case "CarPhysicsForCarType":
+					Gui.set_car_physics_by_car_type(msg.physics);
 					break;
 				case "WrittenCarDataForTrack":
 					Gui.disable_car_data_actions();
@@ -110,7 +117,7 @@ var Gui = (function() {
 
 			Action.load_car_data_for_selected_track();
 		},
-		set_car_data: function(primary, secondary, physics) {
+		set_car_data: function(primary, secondary, physics, physics_car_type) {
 			$('#primary-car-type').val(primary);
 			$('#secondary-car-type').val(secondary);
 			$('#acceleration').val(physics.acceleration);
@@ -122,6 +129,14 @@ var Gui = (function() {
 
 			Gui.set_active_car_type_images();
 		},
+		set_car_physics_by_car_type: function(physics) {
+			$('#acceleration-car-type').text(physics.acceleration);
+			$('#top-speed-car-type').text(physics.top_speed);
+			$('#grip-car-type').text(physics.grip);
+			$('#collision-impact-car-type').text(physics.collision_impact);
+			$('#turning-car-type').text(physics.turning);
+			$('#sliding-friction-car-type').text(physics.sliding_friction);
+		},
 		set_active_car_type_images: function() {
 			let primary = $('#primary-car-type').val();
 			let secondary = $('#secondary-car-type').val();
@@ -131,6 +146,7 @@ var Gui = (function() {
 		change_of_car_type: function() {
 			Gui.set_active_car_type_images();
 			Gui.enable_car_data_actions();
+			Action.load_car_physics_for_car_type($('#primary-car-type').val());
 		},
 		change_of_car_physics: function() {
 			Gui.enable_car_data_actions();
