@@ -24,6 +24,7 @@ There is a VS code config for debugging the rust code (using the MSVC debugger s
 For the frontend you can run the [Edge DevTools](https://docs.microsoft.com/en-us/microsoft-edge/devtools-guide).
 
 ## Version History
+* **0.4**: Add reading of physics by car type.
 * **0.3**: Add reading/editing of physics by track.
 * **0.2**: Add car type images.
 * **0.1**: Initial version. Reading/Writing of car types only.
