@@ -14,7 +14,11 @@ pub fn build_html_template() -> String {
             include_str!("ui/app.js")
         ),
         logo = images.get(&Image::Logo).unwrap(),
-        english = images.get(&Image::Lang(Language::English)).unwrap()
+        english = images.get(&Image::Lang(Language::English)).unwrap(),
+        french = images.get(&Image::Lang(Language::French)).unwrap(),
+        german = images.get(&Image::Lang(Language::German)).unwrap(),
+        italian = images.get(&Image::Lang(Language::Italian)).unwrap(),
+        spanish = images.get(&Image::Lang(Language::Spanish)).unwrap(),
     );
 
     html

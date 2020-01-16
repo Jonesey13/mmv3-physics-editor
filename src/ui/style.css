@@ -9,7 +9,7 @@ header {
   display: flex;
   justify-content: flex-start;
   width: 100%;
-  height: 15vh;
+  height: 13vh;
   border-bottom: 1px solid black;
   background-color: rgb(51, 51, 51);
 }
@@ -26,20 +26,27 @@ header {
   justify-content: flex-start;
   align-items: center;
   align-content: center;
+  background-color: black;
 }
 
 #language-text {
   font-family: "Helvetica Neue",Helvetica,Arial,serif;
   font-weight: lighter;
   font-size: 30px;
-  margin: 5vw;
-  width: 30vw;
+  margin: 2vw;
+  width: 20vw;
   flex: initial;
 }
 
-#english {
+.language-image-active {
   height: 100%;
   flex: initial;
+}
+
+.language-image-inactive {
+  height: 100%;
+  flex: initial;
+  opacity: 0.5;
 }
 
 #track-and-car-type {

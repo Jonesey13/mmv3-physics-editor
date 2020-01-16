@@ -11,7 +11,14 @@ pub struct EncodedImageCollection {
 
 impl EncodedImageCollection {
     pub fn build() -> Self {
-        let image_enums = vec![Image::Logo, Image::Lang(Language::English)];
+        let image_enums = vec![
+            Image::Logo, 
+            Image::Lang(Language::English),
+            Image::Lang(Language::French),
+            Image::Lang(Language::German),
+            Image::Lang(Language::Italian),
+            Image::Lang(Language::Spanish)
+        ];
 
         let images: HashMap<Image, String> = image_enums
         .into_iter()
