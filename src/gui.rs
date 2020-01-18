@@ -1,4 +1,4 @@
-use crate::car_physics::CarPhysicsByCarType;
+use crate::language::Language;
 use crate::car_physics::CarPhysicsByTrack;
 use crate::car_type::CarType;
 use crate::data_service::DataService;
@@ -24,6 +24,9 @@ const MMV3_BIN_SIZE: u64 = 674461872;
 #[derive(Deserialize, Debug, Clone)]
 #[serde(tag = "type")]
 pub enum GuiRequest {
+    SetLanguage {
+        language: Language,
+    },
     LoadTrackList,
     LoadCarTypeList,
     LoadCarDataForTrack {
@@ -59,6 +62,9 @@ pub enum GuiResponse {
         physics: CarPhysicsByTrack
     },
     WrittenCarDataForTrack,
+    LanguageSet {
+        language: Language
+    },
 }
 
 #[derive(Serialize)]
@@ -77,6 +83,7 @@ pub struct CarTypeResponseData {
 #[derive(Default, Debug, Serialize, Deserialize)]
 pub struct PersistentData {
     pub file_path: PathBuf,
+    pub language: Language
 }
 
 pub fn spawn_gui() {
@@ -95,6 +102,20 @@ pub fn spawn_gui() {
         .user_data(PersistentData::default())
         .invoke_handler(move |mut webview, arg| {
             match serde_json::from_str::<GuiRequest>(arg) {
+                Ok(GuiRequest::SetLanguage {
+                    language
+                }) => {
+                    let mut user_data = webview.user_data_mut();
+
+                    user_data.language = language;
+
+                    message_dispatch(
+                        &mut webview,
+                        &GuiResponse::LanguageSet {
+                            language
+                        }
+                    )
+                },
                 Ok(GuiRequest::LoadTrackList) => {
                     let path: PathBuf;
 
@@ -151,7 +172,10 @@ pub fn spawn_gui() {
                 Ok(GuiRequest::LoadCarDataForTrack {
                     track
                 }) => {
-                    let data_service = DataService::new(&webview.user_data().file_path);
+                    let data_service = DataService::new(
+                        &webview.user_data().file_path,
+                        webview.user_data().language
+                    );
 
                     let primary = data_service
                         .read_car_type(track, TeamPlayer::First)
@@ -175,7 +199,10 @@ pub fn spawn_gui() {
                 Ok(GuiRequest::LoadCarPhysicsForCarType {
                     car_type
                 }) => {
-                    let data_service = DataService::new(&webview.user_data().file_path);
+                    let data_service = DataService::new(
+                        &webview.user_data().file_path,
+                        webview.user_data().language
+                    );
 
                     let physics: CarPhysicsByTrack = data_service
                         .read_car_physics_by_car_type(car_type)
@@ -195,7 +222,10 @@ pub fn spawn_gui() {
                     secondary,
                     physics
                 }) => {
-                    let data_service = DataService::new(&webview.user_data().file_path);
+                    let data_service = DataService::new(
+                        &webview.user_data().file_path,
+                        webview.user_data().language
+                    );
 
                     data_service
                         .write_car_type(track, TeamPlayer::First, primary)

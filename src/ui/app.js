@@ -13,6 +13,9 @@ var Action = (function() {
 	"use strict";
 
 	return {
+		set_language: function(language) {
+			external.invoke(JSON.stringify({ type: 'SetLanguage', language }));
+		},
 		load_track_list: function() {
 			external.invoke(JSON.stringify({ type: 'LoadTrackList' }));
 		},
@@ -77,6 +80,10 @@ var Response = (function() {
 					break;
 				case "WrittenCarDataForTrack":
 					Gui.disable_car_data_actions();
+					break;
+				case "LanguageSet":
+					Gui.set_active_language(msg.language);
+					Action.load_car_data_for_selected_track();
 					break;
 			}
 		}
@@ -159,6 +166,15 @@ var Gui = (function() {
 			$('#track-save-button').prop('disabled', true);
 			$('#track-cancel-button').prop('disabled', true);
 		},
+		set_active_language: function(language) {
+			$(".language-button").addClass("language-image-inactive");
+			$(".language-button").removeClass("language-image-active");
+
+			let languageIdString = "#" + language.toLowerCase();
+
+			$(languageIdString).addClass("language-image-active");
+			$(languageIdString).removeClass("language-image-inactive");
+		}
 	};
 })();
 

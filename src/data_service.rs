@@ -20,9 +20,9 @@ pub struct DataService<'a> {
 }
 
 impl<'a> DataService<'a> {
-    pub fn new(file_path: &'a PathBuf) -> Self {
+    pub fn new(file_path: &'a PathBuf, language: Language) -> Self {
         Self {
-            language: Language::English,
+            language,
             file_path
         }
     }
@@ -114,8 +114,6 @@ impl<'a> DataService<'a> {
             _unknown_2: rdr.read_u16::<LittleEndian>()?,
         };
 
-        println!("{:?}", physics);
-
         Ok(physics)
     }
 
@@ -180,9 +178,7 @@ mod tests {
     #[test]
     fn can_read_car_type() {
         let file_path = PathBuf::from(TEST_FILE_PATH);
-        let mut data_service = DataService::new(&file_path);
-
-        data_service.set_language(Language::TestLanguage);
+        let mut data_service = DataService::new(&file_path, Language::TestLanguage);
 
         let car_type = data_service.read_car_type(Track::Wipeup, TeamPlayer::First);
 
@@ -193,9 +189,7 @@ mod tests {
     #[test]
     fn can_read_physics_by_track() {
         let file_path = PathBuf::from(TEST_FILE_PATH);
-        let mut data_service = DataService::new(&file_path);
-
-        data_service.set_language(Language::TestLanguage);
+        let mut data_service = DataService::new(&file_path, Language::TestLanguage);
 
         let physics = data_service.read_car_physics_by_track(Track::Wipeup);
 
@@ -216,9 +210,7 @@ mod tests {
     #[test]
     fn can_read_physics_by_car_type() {
         let file_path = PathBuf::from(TEST_FILE_PATH);
-        let mut data_service = DataService::new(&file_path);
-
-        data_service.set_language(Language::TestLanguage);
+        let mut data_service = DataService::new(&file_path, Language::TestLanguage);
 
         let physics = data_service.read_car_physics_by_car_type(CarType::F1Sixties);
 
@@ -243,9 +235,7 @@ mod tests {
     #[test]
     fn can_read_physics_by_car_type_accross_partition() {
         let file_path = PathBuf::from(TEST_FILE_PATH);
-        let mut data_service = DataService::new(&file_path);
-
-        data_service.set_language(Language::TestLanguage);
+        let mut data_service = DataService::new(&file_path, Language::TestLanguage);
 
         let physics = data_service.read_car_physics_by_car_type(CarType::Hovercraft);
 
@@ -270,9 +260,7 @@ mod tests {
     #[test]
     fn can_read_physics_by_car_type_after_partition() {
         let file_path = PathBuf::from(TEST_FILE_PATH);
-        let mut data_service = DataService::new(&file_path);
-
-        data_service.set_language(Language::TestLanguage);
+        let mut data_service = DataService::new(&file_path, Language::TestLanguage);
 
         let physics = data_service.read_car_physics_by_car_type(CarType::Speedboat);
 

@@ -11,11 +11,11 @@
         <div id="language-text">
           <span id="language-text-content">Language:</span>
         </div>
-        <img id="french" class="language-image-inactive" src="{french}"/>
-        <img id="german" class="language-image-inactive" src="{german}"/>
-        <img id="english" class="language-image-active" src="{english}"/>
-        <img id="italian" class="language-image-inactive" src="{italian}"/>
-        <img id="spanish" class="language-image-inactive" src="{spanish}"/>
+        <img id="french" class="language-image-inactive language-button" onclick="Action.set_language('French')" src="{french}"/>
+        <img id="german" class="language-image-inactive language-button" onclick="Action.set_language('German')" src="{german}"/>
+        <img id="english" class="language-image-active language-button" onclick="Action.set_language('English')" src="{english}"/>
+        <img id="italian" class="language-image-inactive language-button" onclick="Action.set_language('Italian')" src="{italian}"/>
+        <img id="spanish" class="language-image-inactive language-button" onclick="Action.set_language('Spanish')" src="{spanish}"/>
       </div>
     </header>
     <form id="main-form" onsubmit="return Action.set_car_data_for_selected_track();">
