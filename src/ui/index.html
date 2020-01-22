@@ -28,11 +28,15 @@
           Primary Car Type:
           <select id="primary-car-type" onchange="Gui.change_of_car_type()"> </select>
           <img class="car-type-image" id="primary-car-image" alt="Primary Car Type Image"/>
+          Original Primary Car Type: <br/>
+          <span id="default-primary-car-type" class="default-text"> </span>
         </div>
         <div class="dropdown" id="secondary-car-type-container">
           Secondary Car Type:
           <select id="secondary-car-type" onchange="Gui.change_of_car_type()"> </select>
           <img class="car-type-image" id="secondary-car-image" alt="Secondary Car Type Image"/>
+          Original Secondary Car Type: <br/>
+          <span id="default-secondary-car-type" class="default-text"> </span>
         </div>
         <button type="submit" class="save" id="track-save-button" disabled>
           Save
@@ -45,7 +49,8 @@
             <tr>
               <th>Property</th>
               <th>Value (0-255)</th>
-              <th>Value From Car Type <br> (used when acceleration = 0)</th>
+              <th>Value From Car Type <br/> (used when acceleration = 0)</th>
+              <th>Original Value (for track)</th>
             </tr>
           </thead>
           <tbody>
@@ -54,42 +59,48 @@
               <td>
                 <input required id="acceleration" type="number" min="0" max="255" onchange="Gui.change_of_car_physics()">
               </td>
-              <td id=acceleration-car-type></td>
+              <td id="acceleration-car-type"></td>
+              <td id="default-acceleration"></td>
             </tr>
             <tr>
               <td class="header-column">Top Speed</td>
               <td>
                 <input required id="top-speed" type="number" min="0" max="255" onchange="Gui.change_of_car_physics()">
               </td>
-              <td id=top-speed-car-type></td>
+              <td id="top-speed-car-type"></td>
+              <td id="default-top-speed"></td>
             </tr>
             <tr>
               <td class="header-column">Grip</td>
               <td>
                 <input required id="grip" type="number" min="0" max="255" onchange="Gui.change_of_car_physics()">
               </td>
-              <td id=grip-car-type></td>
+              <td id="grip-car-type"></td>
+              <td id="default-grip"></td>
             </tr>
             <tr>
               <td class="header-column">Collision Impact</td>
               <td>
                 <input required id="collision-impact" type="number" min="0" max="255" onchange="Gui.change_of_car_physics()">
               </td>
-              <td id=collision-impact-car-type></td>
+              <td id="collision-impact-car-type"></td>
+              <td id="default-collision-impact"></td>
             </tr>
             <tr>
               <td class="header-column">Turning</td>
               <td>
                 <input required id="turning" type="number" min="0" max="255" onchange="Gui.change_of_car_physics()">
               </td>
-              <td id=turning-car-type></td>
+              <td id="turning-car-type"></td>
+              <td id="default-turning"></td>
             </tr>
             <tr>
               <td class="header-column">Sliding Friction</td>
               <td>
                 <input required id="sliding-friction" type="number" min="0" max="255" onchange="Gui.change_of_car_physics()">
               </td>
-              <td id=sliding-friction-car-type></td>
+              <td id="sliding-friction-car-type"></td>
+              <td id="default-sliding-friction"></td>
             </tr>
           </tbody>
         </table>

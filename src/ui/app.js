@@ -71,7 +71,7 @@ var Response = (function() {
 					Gui.set_car_type_list(msg.car_types);
 					break;
 				case "CarDataForTrack":
-					Gui.set_car_data(msg.primary, msg.secondary, msg.physics);
+					Gui.set_car_data(msg.primary, msg.secondary, msg.physics, msg.default_primary, msg.default_secondary, msg.default_physics);
 					Action.load_car_physics_for_car_type();
 					Gui.disable_car_data_actions();
 					break;
@@ -124,15 +124,23 @@ var Gui = (function() {
 
 			Action.load_car_data_for_selected_track();
 		},
-		set_car_data: function(primary, secondary, physics, physics_car_type) {
+		set_car_data: function(primary, secondary, physics, default_primary, default_secondary, default_physics) {
 			$('#primary-car-type').val(primary);
-			$('#secondary-car-type').val(secondary);
+            $('#secondary-car-type').val(secondary);
+            $('#default-primary-car-type').text(car_types.find((car_type) => car_type.key === default_primary).name);
+			$('#default-secondary-car-type').text(car_types.find((car_type) => car_type.key === default_secondary).name);
 			$('#acceleration').val(physics.acceleration);
 			$('#top-speed').val(physics.top_speed);
 			$('#grip').val(physics.grip);
 			$('#collision-impact').val(physics.collision_impact);
 			$('#turning').val(physics.turning);
-			$('#sliding-friction').val(physics.sliding_friction);
+            $('#sliding-friction').val(physics.sliding_friction);
+            $('#default-acceleration').text(default_physics.acceleration);
+			$('#default-top-speed').text(default_physics.top_speed);
+			$('#default-grip').text(default_physics.grip);
+			$('#default-collision-impact').text(default_physics.collision_impact);
+			$('#default-turning').text(default_physics.turning);
+			$('#default-sliding-friction').text(default_physics.sliding_friction);
 
 			Gui.set_active_car_type_images();
 		},

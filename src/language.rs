@@ -20,7 +20,9 @@ pub enum Language {
     #[strum(props(CarTypeOffset="0xB4A732C", CarPhysicsByCarTypeOffset="0xB4A5E7C", CarPhysicsByTrackOffset="0xB4A61DC"))]
     Spanish,
     #[strum(props(CarTypeOffset="0xA", CarPhysicsByCarTypeOffset="0xBB", CarPhysicsByCarTypePartition="123", CarPhysicsByTrackOffset="0xCCC"))]
-    TestLanguage
+    TestLanguage,
+    #[strum(props(CarTypeOffset="0x0", CarPhysicsByCarTypeOffset="0xC0",  CarPhysicsByTrackOffset="0x220"))]
+    DefaultData
 }
 
 impl Default for Language {

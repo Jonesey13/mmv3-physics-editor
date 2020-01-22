@@ -34,7 +34,7 @@ impl<'a> DataService<'a> {
     pub fn read_car_type(&self, track: Track, player: TeamPlayer) -> Result<CarType> {
         let mut file = File::open(self.file_path)?;
 
-        let buffer = Self::read_bytes(
+        let buffer = read_bytes(
             &mut file,
             None, 
             self.language.get_car_type_offset(),
@@ -65,7 +65,7 @@ impl<'a> DataService<'a> {
     pub fn read_car_physics_by_track(&self, track: Track) -> Result<CarPhysicsByTrack> {
         let mut file = File::open(self.file_path)?;
 
-        let buffer = Self::read_bytes(
+        let buffer = read_bytes(
             &mut file,
             None, 
             self.language.get_car_physics_by_track_offset(),
@@ -91,7 +91,7 @@ impl<'a> DataService<'a> {
     pub fn read_car_physics_by_car_type(&self, car_type: CarType) -> Result<CarPhysicsByCarType> {
         let mut file = File::open(self.file_path)?;
 
-        let buffer = Self::read_bytes(
+        let buffer = read_bytes(
             &mut file,
             self.language.get_car_physics_by_car_type_partition(), 
             self.language.get_car_physics_by_car_type_offset(),
@@ -116,58 +116,58 @@ impl<'a> DataService<'a> {
 
         Ok(physics)
     }
+}
 
-    // Reads bytes (potentially over a sector partition)
-    fn read_bytes(
-        file: &mut File, 
-        partition_start: Option<u64>, 
-        disc_offset: u64,
-        local_offset: u64,
-        length: u64
-    ) -> Result<Vec<u8>> {
-        if let Some(partition) = partition_start {
-            if disc_offset + local_offset + length <= partition {
-                // We're before the partition, so handle normally
-                Self::read_bytes_linear(file, disc_offset + local_offset, length)
-            } else if disc_offset + local_offset >= partition {
-                // We're after the partition, so shift by the partition size
-                Self::read_bytes_linear(file, disc_offset + local_offset + DISK_SECTOR_METADATA_BLOCKSIZE, length)
-            } else {
-                // We're bridging the partition
-                Self::read_around_sector_partition(file, partition, disc_offset + local_offset, length)
-            }
+// Reads bytes (potentially over a sector partition)
+pub fn read_bytes<F: Seek + Read>(
+    file: &mut F, 
+    partition_start: Option<u64>, 
+    disc_offset: u64,
+    local_offset: u64,
+    length: u64
+) -> Result<Vec<u8>> {
+    if let Some(partition) = partition_start {
+        if disc_offset + local_offset + length <= partition {
+            // We're before the partition, so handle normally
+            read_bytes_linear(file, disc_offset + local_offset, length)
+        } else if disc_offset + local_offset >= partition {
+            // We're after the partition, so shift by the partition size
+            read_bytes_linear(file, disc_offset + local_offset + DISK_SECTOR_METADATA_BLOCKSIZE, length)
         } else {
-            Self::read_bytes_linear(file, disc_offset + local_offset, length)
+            // We're bridging the partition
+            read_around_sector_partition(file, partition, disc_offset + local_offset, length)
         }
+    } else {
+        read_bytes_linear(file, disc_offset + local_offset, length)
     }
+}
 
-    fn read_around_sector_partition(file: &mut File, partition_start: u64, byte_offset: u64, length: u64) -> Result<Vec<u8>> {
-        let partition_point = partition_start - byte_offset;
-        let partition_end = partition_start + DISK_SECTOR_METADATA_BLOCKSIZE;
+pub fn read_around_sector_partition<F: Seek + Read>(file: &mut F, partition_start: u64, byte_offset: u64, length: u64) -> Result<Vec<u8>> {
+    let partition_point = partition_start - byte_offset;
+    let partition_end = partition_start + DISK_SECTOR_METADATA_BLOCKSIZE;
 
-        file.seek(SeekFrom::Start(byte_offset))?;
+    file.seek(SeekFrom::Start(byte_offset))?;
 
-        let mut first_buffer = vec![0u8; partition_point as usize];
-        file.read(&mut first_buffer)?;
+    let mut first_buffer = vec![0u8; partition_point as usize];
+    file.read(&mut first_buffer)?;
 
-        file.seek(SeekFrom::Start(partition_end))?;
+    file.seek(SeekFrom::Start(partition_end))?;
 
-        let mut second_buffer = vec![0u8; (length - partition_point) as usize];
-        file.read(&mut second_buffer)?;
+    let mut second_buffer = vec![0u8; (length - partition_point) as usize];
+    file.read(&mut second_buffer)?;
 
-        first_buffer.append(&mut second_buffer);
-        
-        Ok(first_buffer)
-    }
+    first_buffer.append(&mut second_buffer);
+    
+    Ok(first_buffer)
+}
 
-    fn read_bytes_linear(file: &mut File, byte_offset: u64, length: u64) -> Result<Vec<u8>> {
-        file.seek(SeekFrom::Start(byte_offset))?;
+pub fn read_bytes_linear<F: Seek + Read>(file: &mut F, byte_offset: u64, length: u64) -> Result<Vec<u8>> {
+    file.seek(SeekFrom::Start(byte_offset))?;
 
-        let mut buffer = vec![0u8; length as usize];
-        file.read(&mut buffer)?;
-        
-        Ok(buffer)
-    }
+    let mut buffer = vec![0u8; length as usize];
+    file.read(&mut buffer)?;
+    
+    Ok(buffer)
 }
 
 #[cfg(test)]
@@ -178,7 +178,7 @@ mod tests {
     #[test]
     fn can_read_car_type() {
         let file_path = PathBuf::from(TEST_FILE_PATH);
-        let mut data_service = DataService::new(&file_path, Language::TestLanguage);
+        let data_service = DataService::new(&file_path, Language::TestLanguage);
 
         let car_type = data_service.read_car_type(Track::Wipeup, TeamPlayer::First);
 
@@ -189,7 +189,7 @@ mod tests {
     #[test]
     fn can_read_physics_by_track() {
         let file_path = PathBuf::from(TEST_FILE_PATH);
-        let mut data_service = DataService::new(&file_path, Language::TestLanguage);
+        let data_service = DataService::new(&file_path, Language::TestLanguage);
 
         let physics = data_service.read_car_physics_by_track(Track::Wipeup);
 
@@ -210,7 +210,7 @@ mod tests {
     #[test]
     fn can_read_physics_by_car_type() {
         let file_path = PathBuf::from(TEST_FILE_PATH);
-        let mut data_service = DataService::new(&file_path, Language::TestLanguage);
+        let data_service = DataService::new(&file_path, Language::TestLanguage);
 
         let physics = data_service.read_car_physics_by_car_type(CarType::F1Sixties);
 
@@ -235,7 +235,7 @@ mod tests {
     #[test]
     fn can_read_physics_by_car_type_accross_partition() {
         let file_path = PathBuf::from(TEST_FILE_PATH);
-        let mut data_service = DataService::new(&file_path, Language::TestLanguage);
+        let data_service = DataService::new(&file_path, Language::TestLanguage);
 
         let physics = data_service.read_car_physics_by_car_type(CarType::Hovercraft);
 
@@ -260,7 +260,7 @@ mod tests {
     #[test]
     fn can_read_physics_by_car_type_after_partition() {
         let file_path = PathBuf::from(TEST_FILE_PATH);
-        let mut data_service = DataService::new(&file_path, Language::TestLanguage);
+        let data_service = DataService::new(&file_path, Language::TestLanguage);
 
         let physics = data_service.read_car_physics_by_car_type(CarType::Speedboat);
 

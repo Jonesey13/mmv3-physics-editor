@@ -69,6 +69,11 @@ select {
   width: 100%
 }
 
+.default-text {
+  font-size: 16px;
+  font-weight: bold;
+}
+
 button {
   flex: 1 1 auto;
   font-size: 20px;

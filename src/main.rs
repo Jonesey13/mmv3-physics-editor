@@ -9,6 +9,7 @@ pub mod car_type;
 pub mod language;
 pub mod car_physics;
 pub mod data_service;
+pub mod default_data_service;
 pub mod gui;
 pub mod console;
 pub mod template;

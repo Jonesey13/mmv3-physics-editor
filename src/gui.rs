@@ -3,6 +3,7 @@ use crate::car_physics::CarPhysicsByTrack;
 use crate::car_type::CarType;
 use crate::data_service::DataService;
 use crate::car_type::TeamPlayer;
+use crate::default_data_service::DefaultDataService;
 use std::sync::atomic::{AtomicBool, Ordering};
 use std::sync::Arc;
 use std::path::PathBuf;
@@ -55,8 +56,11 @@ pub enum GuiResponse {
     },
     CarDataForTrack {
         primary: CarType,
+        default_primary: CarType,
         secondary: CarType,
+        default_secondary: CarType,
         physics: CarPhysicsByTrack,
+        default_physics: CarPhysicsByTrack,
     },
     CarPhysicsForCarType {
         physics: CarPhysicsByTrack
@@ -176,7 +180,7 @@ pub fn spawn_gui() {
                         &webview.user_data().file_path,
                         webview.user_data().language
                     );
-
+                    
                     let primary = data_service
                         .read_car_type(track, TeamPlayer::First)
                         .expect("Failed to read primary car type!");
@@ -186,13 +190,28 @@ pub fn spawn_gui() {
                     let physics = data_service
                         .read_car_physics_by_track(track)
                         .expect("Failed to read car physics");
+                    
+                    let default_data_service = DefaultDataService::new();
+
+                    let default_primary = default_data_service
+                        .read_car_type(track, TeamPlayer::First)
+                        .expect("Failed to read primary car type!");
+                    let default_secondary = default_data_service
+                        .read_car_type(track, TeamPlayer::Second)
+                        .expect("Failed to read secondary car type!");
+                    let default_physics = default_data_service
+                        .read_car_physics_by_track(track)
+                        .expect("Failed to read car physics");
 
                     message_dispatch(
                         &mut webview,
                         &GuiResponse::CarDataForTrack {
                             primary,
+                            default_primary,
                             secondary,
+                            default_secondary,
                             physics,
+                            default_physics
                         }
                     );
                 },
