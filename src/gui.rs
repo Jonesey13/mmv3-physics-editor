@@ -33,6 +33,9 @@ pub enum GuiRequest {
     LoadCarDataForTrack {
         track: Track
     },
+    ResetCarDataForTrack {
+        track: Track
+    },
     LoadCarPhysicsForCarType {
         car_type: CarType
     },
@@ -66,6 +69,7 @@ pub enum GuiResponse {
         physics: CarPhysicsByTrack
     },
     WrittenCarDataForTrack,
+    ResetCarDataForTrack,
     LanguageSet {
         language: Language
     },
@@ -213,6 +217,41 @@ pub fn spawn_gui() {
                             physics,
                             default_physics
                         }
+                    );
+                },
+                Ok(GuiRequest::ResetCarDataForTrack {
+                    track
+                }) => {
+                    let default_data_service = DefaultDataService::new();
+                    
+                    let default_primary = default_data_service
+                        .read_car_type(track, TeamPlayer::First)
+                        .expect("Failed to read primary car type!");
+                    let default_secondary = default_data_service
+                        .read_car_type(track, TeamPlayer::Second)
+                        .expect("Failed to read secondary car type!");
+                    let default_physics = default_data_service
+                        .read_car_physics_by_track(track)
+                        .expect("Failed to read car physics");
+
+                    let data_service = DataService::new(
+                        &webview.user_data().file_path,
+                        webview.user_data().language
+                    );
+
+                    data_service
+                        .write_car_type(track, TeamPlayer::First, default_primary)
+                        .expect("Failed to write primary car type!");
+                    data_service
+                        .write_car_type(track, TeamPlayer::Second, default_secondary)
+                        .expect("Failed to write secondary car type!");
+                    data_service
+                        .write_car_physics_by_track(track, default_physics)
+                        .expect("Failed to write car physics for track!");
+
+                    message_dispatch(
+                        &mut webview,
+                        &GuiResponse::ResetCarDataForTrack
                     );
                 },
                 Ok(GuiRequest::LoadCarPhysicsForCarType {

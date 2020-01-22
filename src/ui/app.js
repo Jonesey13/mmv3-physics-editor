@@ -27,6 +27,9 @@ var Action = (function() {
 		},
 		load_car_physics_for_car_type: function() {
 			external.invoke(JSON.stringify({ type: 'LoadCarPhysicsForCarType', car_type: $('#primary-car-type').val() }));
+        },
+        reset_car_data_for_selected_track: function() {
+			external.invoke(JSON.stringify({ type: 'ResetCarDataForTrack', track: $('#track-select').val() }));
 		},
 		set_car_data_for_selected_track: function() {
 			var mainForm = $('#main-form');
@@ -80,7 +83,10 @@ var Response = (function() {
 					break;
 				case "WrittenCarDataForTrack":
 					Gui.disable_car_data_actions();
-					break;
+                    break;
+                case "ResetCarDataForTrack":
+                    Action.load_car_data_for_selected_track();
+                    break;
 				case "LanguageSet":
 					Gui.set_active_language(msg.language);
 					Action.load_car_data_for_selected_track();
