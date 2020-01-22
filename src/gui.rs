@@ -45,6 +45,9 @@ pub enum GuiRequest {
         secondary: CarType,
         physics: CarPhysicsByTrack
     },
+    OverwriteLanguage {
+        language_to: Language
+    }
 }
 
 // messages to send to the GUI
@@ -73,6 +76,7 @@ pub enum GuiResponse {
     LanguageSet {
         language: Language
     },
+    OverwrittenLanguage
 }
 
 #[derive(Serialize)]
@@ -298,6 +302,46 @@ pub fn spawn_gui() {
                     message_dispatch(
                         &mut webview,
                         &GuiResponse::WrittenCarDataForTrack
+                    );
+                },      
+                Ok(GuiRequest::OverwriteLanguage {
+                    language_to
+                }) => {
+                    let data_service_from = DataService::new(
+                        &webview.user_data().file_path,
+                        webview.user_data().language
+                    );
+
+                    let data_service_to = DataService::new(
+                        &webview.user_data().file_path,
+                        language_to
+                    );
+
+                    for track in Track::iter() {
+                        let primary = data_service_from
+                            .read_car_type(track, TeamPlayer::First)
+                            .expect("Failed to read primary car type");
+                        let secondary = data_service_from
+                            .read_car_type(track, TeamPlayer::Second)
+                            .expect("Failed to read secondary car type");
+                        let physics = data_service_from
+                            .read_car_physics_by_track(track)
+                            .expect("Failed to read physics for track");
+
+                        data_service_to
+                            .write_car_type(track, TeamPlayer::First, primary)
+                            .expect("Failed to write primary car type!");
+                        data_service_to
+                            .write_car_type(track, TeamPlayer::Second, secondary)
+                            .expect("Failed to write secondary car type!");
+                        data_service_to
+                            .write_car_physics_by_track(track, physics)
+                            .expect("Failed to write car physics for track!");
+                    }
+
+                    message_dispatch(
+                        &mut webview,
+                        &GuiResponse::OverwrittenLanguage
                     );
                 }
                 ,

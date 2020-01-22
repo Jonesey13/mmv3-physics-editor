@@ -1,12 +1,7 @@
 /* jshint strict: true, esversion: 5, browser: true */
 
 var car_types = {};
-
-var Util = (function() {
-	"use strict";
-
-	return {};
-});
+var copying_language = false;
 
 // Actions call back into Rust
 var Action = (function() {
@@ -14,7 +9,19 @@ var Action = (function() {
 
 	return {
 		set_language: function(language) {
-			external.invoke(JSON.stringify({ type: 'SetLanguage', language }));
+			if (!copying_language) {
+				external.invoke(JSON.stringify({ type: 'SetLanguage', language }));
+			} else {
+				external.invoke(JSON.stringify({ type: 'OverwriteLanguage', language_to: language }));
+			}
+		},
+		set_copying_mode: function() {
+			copying_language = true;
+			Gui.set_language_copying_mode();
+		},
+		cancel_copying_mode: function() {
+			copying_language = false;
+			Gui.remove_language_copying_mode();
 		},
 		load_track_list: function() {
 			external.invoke(JSON.stringify({ type: 'LoadTrackList' }));
@@ -90,6 +97,10 @@ var Response = (function() {
 				case "LanguageSet":
 					Gui.set_active_language(msg.language);
 					Action.load_car_data_for_selected_track();
+					break;
+				case "OverwrittenLanguage":
+					copying_language = false;
+					Gui.remove_language_copying_mode();
 					break;
 			}
 		}
@@ -188,7 +199,17 @@ var Gui = (function() {
 
 			$(languageIdString).addClass("language-image-active");
 			$(languageIdString).removeClass("language-image-inactive");
-		}
+		},
+		set_language_copying_mode: function(language) {
+			$(".language-button").addClass("language-image-copy-mode");
+			$("#language-copy-button").addClass("hide");
+			$("#language-copy-cancel-button").removeClass("hide");
+		},
+		remove_language_copying_mode: function(language) {
+			$(".language-button").removeClass("language-image-copy-mode");
+			$("#language-copy-button").removeClass("hide");
+			$("#language-copy-cancel-button").addClass("hide");
+		},
 	};
 })();
 
